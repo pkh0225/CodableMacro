@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - 매크로 선언
 
-/// afterParsedTypes: AfterParsedProtocol을 채택한 프로퍼티 타입 목록 (자동 AfterParsedCoder 적용)
+/// afterParsedTypes: CodableAfterProtocol을 채택한 프로퍼티 타입 목록 (자동 AfterParsedCoder 적용)
 @attached(extension, conformances: Codable, names:
     named(CodingKeys),
     named(init(from:)),
@@ -44,15 +44,15 @@ public macro CodedIn(_ parentTypeName: String, _ parentPropertyName: String) = #
     type: "CodedInMacro"
 )
 
-// MARK: - AfterParsedProtocol
+// MARK: - CodableAfterProtocol
 
-public protocol AfterParsedProtocol {
+public protocol CodableAfterProtocol {
     mutating func afterParsed()
 }
 
 // MARK: - AfterParsedCoder
 
-public struct AfterParsedCoder<T: Codable & AfterParsedProtocol> {
+public struct AfterParsedCoder<T: Codable & CodableAfterProtocol> {
     public init() {}
 
     public func decodeIfPresent<Key: CodingKey>(

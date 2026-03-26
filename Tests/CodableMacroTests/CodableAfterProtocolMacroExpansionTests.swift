@@ -1,21 +1,21 @@
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-/// 타입이 `AfterParsedProtocol`을 채택하면 `init(from:)` 끝에 `afterParsed()` 호출
-final class AfterParsedProtocolMacroExpansionTests: XCTestCase {
+/// 타입이 `CodableAfterProtocol`을 채택하면 `init(from:)` 끝에 `afterParsed()` 호출
+final class CodableAfterProtocolMacroExpansionTests: XCTestCase {
 
     func test_afterParsed_calledAtEndOfInit() throws {
         assertMacroExpansion(
             """
             @Codable
-            struct UserMeta: AfterParsedProtocol, Sendable {
+            struct UserMeta: CodableAfterProtocol, Sendable {
                 @Default("이름 없음")
                 var name: String
                 mutating func afterParsed() {}
             }
             """,
             expandedSource: """
-            struct UserMeta: AfterParsedProtocol, Sendable {
+            struct UserMeta: CodableAfterProtocol, Sendable {
                 var name: String
                 mutating func afterParsed() {}
             }

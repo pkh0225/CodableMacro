@@ -1,9 +1,9 @@
 import Foundation
 import CodableMacro
 
-// ✅ CodableData가 AfterParsedProtocol 채택 → afterParsedTypes에 명시
+// ✅ CodableData가 CodableAfterProtocol 채택 → afterParsedTypes에 명시
 @Codable
-struct UserMetaCodable: AfterParsedProtocol {
+struct UserMetaCodable: CodableAfterProtocol {
     var codableData: CodableData?       // → AfterParsedCoder 자동 적용
     var codableData2: [CodableData2]     // → AfterParsedCoder 자동 적용
 
@@ -43,7 +43,7 @@ struct SimpleModel {
 
 
 @Codable
-struct CodableData: AfterParsedProtocol {
+struct CodableData: CodableAfterProtocol {
     var bio: String      // ValueCoder 자동 적용
     var title: String      // ValueCoder 자동 적용
     var count: Int         // ValueCoder 자동 적용
@@ -56,7 +56,7 @@ struct CodableData: AfterParsedProtocol {
 }
 
 @Codable
-struct CodableData2: AfterParsedProtocol {
+struct CodableData2: CodableAfterProtocol {
     var title: String      // ValueCoder 자동 적용
     var count: Int         // ValueCoder 자동 적용
     /// JSON의 `price` 대신 부모 `UserMetaCodable.score`를 디코딩 후 주입

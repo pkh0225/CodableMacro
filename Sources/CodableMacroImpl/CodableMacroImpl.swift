@@ -17,7 +17,7 @@ public struct CodableMacro: ExtensionMacro {
         let typeName = declaration.as(StructDeclSyntax.self)?.name.text ?? ""
 
         let conformsToAfterParsed = declaration.inheritanceClause?.inheritedTypes
-            .contains { $0.type.trimmedDescription == "AfterParsedProtocol" }
+            .contains { $0.type.trimmedDescription == "CodableAfterProtocol" }
         ?? false
 
         let members = declaration.memberBlock.members

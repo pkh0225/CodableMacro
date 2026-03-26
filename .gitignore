@@ -1,2 +1,3 @@
 *.xcuserstate
 /.swiftpm/xcode/xcuserdata
+/.build
