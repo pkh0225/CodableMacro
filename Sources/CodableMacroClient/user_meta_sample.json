@@ -1,0 +1,25 @@
+{
+  "codableData": {
+    "bio": "Swift 매크로로 디코딩한 소개 문구",
+    "title": "메타 제목",
+    "count": 42,
+    "price": 19.99
+  },
+  "codableData2": [
+    {
+      "title": "첫 번째 항목",
+      "count": 1,
+      "price": 1.5
+    },
+    {
+      "title": "두 번째 항목",
+      "count": 2,
+      "price": 2.5
+    }
+  ],
+  "name": "홍길동",
+  "name2": "별명",
+  "age": 30,
+  "score": 98.5,
+  "isAdmin": true
+}
