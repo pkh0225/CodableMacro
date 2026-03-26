@@ -1,0 +1,2 @@
+# CodableMacro
+Auto Codable
