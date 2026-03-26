@@ -4,7 +4,7 @@ import CompilerPluginSupport
 
 let package = Package(
     name: "CodableMacro",
-    platforms: [.iOS(.v15), .macOS(.v13)],
+    platforms: [.macOS(.v10_15), .iOS(.v15), .tvOS(.v13), .watchOS(.v6)],
     products: [
         .library(
             name: "CodableMacro",
@@ -16,10 +16,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/apple/swift-syntax.git",
-            from: "510.0.0"
-        ),
+        .package(url: "https://github.com/swiftlang/swift-syntax.git", "509.1.1"..<"601.0.0")
     ],
     targets: [
         .target(
