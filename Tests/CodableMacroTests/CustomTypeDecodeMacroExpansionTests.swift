@@ -11,7 +11,8 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
             struct S: Sendable {
                 var kind: Kind
             }
-            enum Kind: String, Codable { case a }
+            enum Kind: String, Codable { case a
+            }
             """,
             expandedSource: """
             struct S: Sendable {
@@ -46,10 +47,6 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
-                mutating func applyCodedInFromParent(_ parent: UserMetaCodable) {
-                }
-            }
             """,
             macros: CodableMacroTestSupport.macros
         )

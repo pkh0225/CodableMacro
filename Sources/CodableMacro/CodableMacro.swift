@@ -46,8 +46,8 @@ public macro CodedIn(_ parentTypeName: String, _ parentPropertyName: String) = #
 
 // MARK: - CodableAfterProtocol
 
-public protocol CodableAfterProtocol {
-    mutating func afterParsed()
+nonisolated public protocol CodableAfterProtocol {
+    nonisolated mutating func afterParsed()
 }
 
 // MARK: - AfterParsedCoder

@@ -55,10 +55,6 @@ final class CodedAsMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
-                mutating func applyCodedInFromParent(_ parent: UserMetaCodable) {
-                }
-            }
             """,
             macros: CodableMacroTestSupport.macros
         )

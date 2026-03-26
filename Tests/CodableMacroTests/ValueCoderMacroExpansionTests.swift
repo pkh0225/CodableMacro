@@ -47,10 +47,6 @@ final class ValueCoderMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
-                mutating func applyCodedInFromParent(_ parent: UserMetaCodable) {
-                }
-            }
             """,
             macros: CodableMacroTestSupport.macros
         )
@@ -99,10 +95,6 @@ final class ValueCoderMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
-                mutating func applyCodedInFromParent(_ parent: UserMetaCodable) {
-                }
-            }
             """,
             macros: CodableMacroTestSupport.macros
         )

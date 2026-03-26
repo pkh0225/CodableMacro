@@ -50,9 +50,6 @@ final class CodedInMacroExpansionTests: XCTestCase {
                         self.items = Array<CodableData2>()
                     }
 
-                    for __codedInIdx in items.indices {
-                        items[__codedInIdx].applyCodedInFromParent(self)
-                    }
                 }
             }
 
@@ -69,11 +66,6 @@ final class CodedInMacroExpansionTests: XCTestCase {
                 enum CodingKeys: String, CodingKey {
                     case score = "score"
                     case items = "items"
-                }
-            }
-
-            nonisolated extension UserMetaCodable {
-                mutating func applyCodedInFromParent(_ parent: UserMetaCodable) {
                 }
             }
 

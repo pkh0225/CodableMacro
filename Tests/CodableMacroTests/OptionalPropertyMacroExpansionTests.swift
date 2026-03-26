@@ -39,10 +39,6 @@ final class OptionalPropertyMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
-                mutating func applyCodedInFromParent(_ parent: UserMetaCodable) {
-                }
-            }
             """,
             macros: CodableMacroTestSupport.macros
         )

@@ -59,10 +59,6 @@ final class MultiPropertyMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension User {
-                mutating func applyCodedInFromParent(_ parent: UserMetaCodable) {
-                }
-            }
             """,
             macros: CodableMacroTestSupport.macros
         )

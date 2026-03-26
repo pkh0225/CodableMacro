@@ -35,7 +35,13 @@ public struct CodableMacro: ExtensionMacro {
 
         try validateCodedInMetadata(properties)
 
-        let arrayStructProps = ArrayStructPropertyExtractor.arrayStructBindings(from: declaration)
+        let codedInChildTypes = collectCodedInChildTypeNames(
+            in: declaration,
+            forParentTypeName: typeName
+        )
+        let arrayStructProps = ArrayStructPropertyExtractor
+            .arrayStructBindings(from: declaration)
+            .filter { codedInChildTypes.contains($0.elementTypeName) }
 
         let generator = CodeGenerator(
             typeName: typeName,
@@ -47,9 +53,9 @@ public struct CodableMacro: ExtensionMacro {
         let initBody = generator.indentedInitFromDecoderForExtension()
         let encodeBody = generator.indentedEncodeToForExtension()
         let keysBody = generator.indentedCodingKeysForExtension()
-        let codedInBody = generator.indentedApplyCodedInFromParentExtension()
+        let hasCodedInProperties = properties.contains(where: \.isCodedIn)
 
-        return [
+        var extensions: [ExtensionDeclSyntax] = [
             try ExtensionDeclSyntax("""
             nonisolated extension \(type): Decodable {
             \(raw: initBody)
@@ -65,12 +71,20 @@ public struct CodableMacro: ExtensionMacro {
             \(raw: keysBody)
             }
             """),
-            try ExtensionDeclSyntax("""
-            nonisolated extension \(type) {
-            \(raw: codedInBody)
-            }
-            """),
         ]
+
+        if hasCodedInProperties {
+            let codedInBody = generator.indentedApplyCodedInFromParentExtension()
+            extensions.append(
+                try ExtensionDeclSyntax("""
+                nonisolated extension \(type) {
+                \(raw: codedInBody)
+                }
+                """)
+            )
+        }
+
+        return extensions
     }
 
     private static func validateCodedInMetadata(_ properties: [PropertyInfo]) throws {
@@ -79,6 +93,34 @@ public struct CodableMacro: ExtensionMacro {
         guard parents.allSatisfy({ $0 == parents[0] }) else {
             throw MacroError.codedInParentTypeMismatch
         }
+    }
+
+    private static func collectCodedInChildTypeNames(
+        in declaration: some DeclGroupSyntax,
+        forParentTypeName parentTypeName: String
+    ) -> Set<String> {
+        guard let sourceFile = declaration.root.as(SourceFileSyntax.self) else {
+            return []
+        }
+
+        var result = Set<String>()
+        for statement in sourceFile.statements {
+            guard let childStruct = statement.item.as(StructDeclSyntax.self) else { continue }
+            let childTypeName = childStruct.name.text
+
+            for member in childStruct.memberBlock.members {
+                guard let variable = member.decl.as(VariableDeclSyntax.self),
+                      let info = try? AttributeParser.parse(variable: variable),
+                      let codedInParent = info.codedInParentType,
+                      codedInParent == parentTypeName
+                else {
+                    continue
+                }
+                result.insert(childTypeName)
+                break
+            }
+        }
+        return result
     }
 }
 

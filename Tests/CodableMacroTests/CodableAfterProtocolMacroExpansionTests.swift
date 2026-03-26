@@ -52,10 +52,6 @@ final class CodableAfterProtocolMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension UserMeta {
-                mutating func applyCodedInFromParent(_ parent: UserMetaCodable) {
-                }
-            }
             """,
             macros: CodableMacroTestSupport.macros
         )

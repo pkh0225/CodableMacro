@@ -48,10 +48,6 @@ final class CodedAtMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
-                mutating func applyCodedInFromParent(_ parent: UserMetaCodable) {
-                }
-            }
             """,
             macros: CodableMacroTestSupport.macros
         )
@@ -113,10 +109,6 @@ final class CodedAtMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension Profile {
-                mutating func applyCodedInFromParent(_ parent: UserMetaCodable) {
-                }
-            }
             """,
             macros: CodableMacroTestSupport.macros
         )
