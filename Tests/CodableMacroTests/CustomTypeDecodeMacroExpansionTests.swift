@@ -52,4 +52,96 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
             macros: CodableMacroTestSupport.macros
         )
     }
+
+    func test_optionalEnum_tryDecodeIfPresent() throws {
+        assertMacroExpansion(
+            """
+            @Codable
+            struct S: Sendable {
+                var kind: Kind?
+            }
+            enum Kind: String, Codable { case a, b }
+            """,
+            expandedSource: """
+            struct S: Sendable {
+                var kind: Kind?
+            }
+            enum Kind: String, Codable { case a, b 
+            }
+
+            nonisolated extension S: Decodable {
+                init(from decoder: any Decoder) throws {
+                    let container = try decoder.container(keyedBy: CodingKeys.self)
+
+                    self.kind = try? container.decodeIfPresent(Kind.self, forKey: CodingKeys.kind)
+                }
+            }
+
+            nonisolated extension S: Encodable {
+                func encode(to encoder: any Encoder) throws {
+                    var container = encoder.container(keyedBy: CodingKeys.self)
+
+                    try container.encodeIfPresent(self.kind, forKey: CodingKeys.kind)
+                }
+            }
+
+            nonisolated extension S {
+                enum CodingKeys: String, CodingKey {
+                    case kind = "kind"
+                }
+            }
+
+            """,
+            macros: CodableMacroTestSupport.macros
+        )
+    }
+
+    func test_enumWithDefault_decodeIfPresentWithCatch() throws {
+        assertMacroExpansion(
+            """
+            @Codable
+            struct S: Sendable {
+                @Default(Kind.a)
+                var kind: Kind
+            }
+            enum Kind: String, Codable { case a, b }
+            """,
+            expandedSource: """
+            struct S: Sendable {
+                var kind: Kind
+            }
+            enum Kind: String, Codable { case a, b 
+            }
+
+            nonisolated extension S: Decodable {
+                init(from decoder: any Decoder) throws {
+                    let container = try decoder.container(keyedBy: CodingKeys.self)
+
+                    do {
+                        self.kind = try container.decodeIfPresent(Kind.self, forKey: CodingKeys.kind) ?? Kind.a
+                    }
+                    catch {
+                        self.kind = Kind.a
+                    }
+                }
+            }
+
+            nonisolated extension S: Encodable {
+                func encode(to encoder: any Encoder) throws {
+                    var container = encoder.container(keyedBy: CodingKeys.self)
+
+                    try container.encode(self.kind, forKey: CodingKeys.kind)
+                }
+            }
+
+            nonisolated extension S {
+                enum CodingKeys: String, CodingKey {
+                    case kind = "kind"
+                }
+            }
+
+            """,
+            macros: CodableMacroTestSupport.macros
+        )
+    }
 }

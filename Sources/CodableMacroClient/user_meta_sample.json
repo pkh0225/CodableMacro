@@ -25,5 +25,6 @@
   "name2": "별명",
   "age": 30,
   "score": 98.5,
-  "isAdmin": true
+  "isAdmin": true,
+  "enumtest": "bbb"
 }

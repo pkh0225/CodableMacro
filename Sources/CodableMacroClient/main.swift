@@ -7,6 +7,11 @@ struct TestB {
     var bbb: Int
 }
 
+enum TestEnum: String, Codable {
+    case aaa
+    case bbb
+}
+
 // ✅ CodableData가 CodableAfterProtocol 채택 → afterParsedTypes에 명시
 @Codable
 struct UserMetaCodable: CodableAfterProtocol {
@@ -30,6 +35,9 @@ struct UserMetaCodable: CodableAfterProtocol {
     var biography: String
 
     var bbb: TestB?
+
+    @Default(TestEnum.aaa)
+    var enumtest: TestEnum
 
     mutating func afterParsed() {
         if name == "이름 없음" { name = "afterParsed() 적용 후 대체값 적용" }
