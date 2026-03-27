@@ -42,27 +42,3 @@ public macro Ignore() = #externalMacro(
 nonisolated public protocol CodableAfterProtocol {
     nonisolated mutating func afterParsed()
 }
-
-// MARK: - AfterParsedCoder
-
-public struct AfterParsedCoder<T: Codable & CodableAfterProtocol> {
-    public init() {}
-
-    public func decodeIfPresent<Key: CodingKey>(
-        from container: KeyedDecodingContainer<Key>,
-        forKey key: Key
-    ) throws -> T? {
-        guard var value = try container.decodeIfPresent(T.self, forKey: key) else { return nil }
-        value.afterParsed()
-        return value
-    }
-
-    public func encodeIfPresent<Key: CodingKey>(
-        _ value: T?,
-        to container: inout KeyedEncodingContainer<Key>,
-        atKey key: Key
-    ) throws {
-        guard let value else { return }
-        try container.encode(value, forKey: key)
-    }
-}
