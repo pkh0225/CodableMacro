@@ -14,7 +14,7 @@ enum TestEnum: String, Codable {
 
 // ✅ CodableData가 CodableAfterProtocol 채택 → afterParsedTypes에 명시
 @Codable
-struct UserMetaCodable: CodableAfterProtocol {
+nonisolated public struct UserMetaCodable: CodableAfterProtocol {
     var codableData: CodableData?       // → AfterParsedCoder 자동 적용
     var codableData2: [CodableData2]     // → AfterParsedCoder 자동 적용
 
@@ -41,7 +41,7 @@ struct UserMetaCodable: CodableAfterProtocol {
 
     var int64: Int64 
 
-    mutating func afterParsed() {
+    nonisolated mutating public func afterParsed() {
         print("UserMetaCodable 000 afterParsed")
         if name == "이름 없음" { name = "afterParsed() 적용 후 대체값 적용" }
     }

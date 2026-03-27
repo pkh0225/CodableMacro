@@ -17,7 +17,7 @@ final class ValueCoderMacroExpansionTests: XCTestCase {
                 var score: Double
             }
 
-            nonisolated extension S: Decodable {
+            extension S: Decodable {
                 init(from decoder: any Decoder) throws {
                     let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -33,7 +33,7 @@ final class ValueCoderMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S: Encodable {
+            extension S: Encodable {
                 func encode(to encoder: any Encoder) throws {
                     var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -41,7 +41,7 @@ final class ValueCoderMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
+            extension S {
                 enum CodingKeys: String, CodingKey {
                     case score = "score"
                 }
@@ -65,7 +65,7 @@ final class ValueCoderMacroExpansionTests: XCTestCase {
                 var flag: Bool
             }
 
-            nonisolated extension S: Decodable {
+            extension S: Decodable {
                 init(from decoder: any Decoder) throws {
                     let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -81,7 +81,7 @@ final class ValueCoderMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S: Encodable {
+            extension S: Encodable {
                 func encode(to encoder: any Encoder) throws {
                     var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -89,7 +89,7 @@ final class ValueCoderMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
+            extension S {
                 enum CodingKeys: String, CodingKey {
                     case flag = "flag"
                 }

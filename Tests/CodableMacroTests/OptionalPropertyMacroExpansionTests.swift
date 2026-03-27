@@ -17,7 +17,7 @@ final class OptionalPropertyMacroExpansionTests: XCTestCase {
                 var note: String?
             }
 
-            nonisolated extension S: Decodable {
+            extension S: Decodable {
                 init(from decoder: any Decoder) throws {
                     let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -25,7 +25,7 @@ final class OptionalPropertyMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S: Encodable {
+            extension S: Encodable {
                 func encode(to encoder: any Encoder) throws {
                     var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -33,7 +33,7 @@ final class OptionalPropertyMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
+            extension S {
                 enum CodingKeys: String, CodingKey {
                     case note = "note"
                 }

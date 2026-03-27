@@ -21,7 +21,7 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
             enum Kind: String, Codable { case a
             }
 
-            nonisolated extension S: Decodable {
+            extension S: Decodable {
                 init(from decoder: any Decoder) throws {
                     let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -34,7 +34,7 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S: Encodable {
+            extension S: Encodable {
                 func encode(to encoder: any Encoder) throws {
                     var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -42,7 +42,7 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
+            extension S {
                 enum CodingKeys: String, CodingKey {
                     case kind = "kind"
                 }
@@ -69,7 +69,7 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
             enum Kind: String, Codable { case a, b 
             }
 
-            nonisolated extension S: Decodable {
+            extension S: Decodable {
                 init(from decoder: any Decoder) throws {
                     let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -77,7 +77,7 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S: Encodable {
+            extension S: Encodable {
                 func encode(to encoder: any Encoder) throws {
                     var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -85,7 +85,7 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
+            extension S {
                 enum CodingKeys: String, CodingKey {
                     case kind = "kind"
                 }
@@ -113,7 +113,7 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
             enum Kind: String, Codable { case a, b 
             }
 
-            nonisolated extension S: Decodable {
+            extension S: Decodable {
                 init(from decoder: any Decoder) throws {
                     let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -126,7 +126,7 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S: Encodable {
+            extension S: Encodable {
                 func encode(to encoder: any Encoder) throws {
                     var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -134,7 +134,7 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
+            extension S {
                 enum CodingKeys: String, CodingKey {
                     case kind = "kind"
                 }

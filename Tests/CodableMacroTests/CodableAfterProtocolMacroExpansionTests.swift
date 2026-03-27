@@ -20,7 +20,7 @@ final class CodableAfterProtocolMacroExpansionTests: XCTestCase {
                 mutating func afterParsed() {}
             }
 
-            nonisolated extension UserMeta: Decodable {
+            extension UserMeta: Decodable {
                 init(from decoder: any Decoder) throws {
                     let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -38,7 +38,7 @@ final class CodableAfterProtocolMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension UserMeta: Encodable {
+            extension UserMeta: Encodable {
                 func encode(to encoder: any Encoder) throws {
                     var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -46,7 +46,7 @@ final class CodableAfterProtocolMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension UserMeta {
+            extension UserMeta {
                 enum CodingKeys: String, CodingKey {
                     case name = "name"
                 }

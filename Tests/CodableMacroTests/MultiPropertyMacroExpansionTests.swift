@@ -20,7 +20,7 @@ final class MultiPropertyMacroExpansionTests: XCTestCase {
                 var age: Int
             }
 
-            nonisolated extension User: Decodable {
+            extension User: Decodable {
                 init(from decoder: any Decoder) throws {
                     let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -43,7 +43,7 @@ final class MultiPropertyMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension User: Encodable {
+            extension User: Encodable {
                 func encode(to encoder: any Encoder) throws {
                     var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -52,7 +52,7 @@ final class MultiPropertyMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension User {
+            extension User {
                 enum CodingKeys: String, CodingKey {
                     case name = "name"
                     case age = "age"

@@ -4,6 +4,8 @@ struct CodeGenerator {
     let typeName: String
     let properties: [PropertyInfo]
     let conformsToAfterParsed: Bool
+    /// struct 키워드 앞 선언 modifier (`public`, `nonisolated` 등). 비어 있으면 생성 멤버에도 붙이지 않음.
+    let memberModifierPrefix: String
 
     /// CodingKeys·디코드·인코드에 포함되는 프로퍼티
     private var codableProperties: [PropertyInfo] {
@@ -74,7 +76,7 @@ struct CodeGenerator {
         }
 
         return """
-        enum CodingKeys: String, CodingKey {
+        \(memberModifierPrefix)enum CodingKeys: String, CodingKey {
         \(cases.joined(separator: "\n"))
         }
         """
@@ -134,7 +136,7 @@ struct CodeGenerator {
         }
 
         return """
-        init(from decoder: any Decoder) throws {
+        \(memberModifierPrefix)init(from decoder: any Decoder) throws {
         \(lines.joined(separator: "\n"))
         }
         """
@@ -166,7 +168,7 @@ struct CodeGenerator {
         }
 
         return """
-        func encode(to encoder: any Encoder) throws {
+        \(memberModifierPrefix)func encode(to encoder: any Encoder) throws {
         \(lines.joined(separator: "\n"))
         }
         """

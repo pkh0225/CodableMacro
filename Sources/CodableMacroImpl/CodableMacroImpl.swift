@@ -14,7 +14,8 @@ public struct CodableMacro: ExtensionMacro {
             throw MacroError.unsupportedType
         }
 
-        let typeName = declaration.as(StructDeclSyntax.self)?.name.text ?? ""
+        let structDecl = declaration.as(StructDeclSyntax.self)!
+        let typeName = structDecl.name.text
 
         let conformsToAfterParsed = declaration.inheritanceClause?.inheritedTypes
             .contains { $0.type.trimmedDescription == "CodableAfterProtocol" }
@@ -33,10 +34,13 @@ public struct CodableMacro: ExtensionMacro {
             throw MacroError.emptyProperties
         }
 
+        let memberPrefix = Self.memberModifierPrefix(from: structDecl)
+
         let generator = CodeGenerator(
             typeName: typeName,
             properties: properties,
-            conformsToAfterParsed: conformsToAfterParsed
+            conformsToAfterParsed: conformsToAfterParsed,
+            memberModifierPrefix: memberPrefix
         )
 
         let initBody = generator.indentedInitFromDecoderForExtension()
@@ -45,21 +49,27 @@ public struct CodableMacro: ExtensionMacro {
 
         return [
             try ExtensionDeclSyntax("""
-            nonisolated extension \(type): Decodable {
+            extension \(type): Decodable {
             \(raw: initBody)
             }
             """),
             try ExtensionDeclSyntax("""
-            nonisolated extension \(type): Encodable {
+            extension \(type): Encodable {
             \(raw: encodeBody)
             }
             """),
             try ExtensionDeclSyntax("""
-            nonisolated extension \(type) {
+            extension \(type) {
             \(raw: keysBody)
             }
             """),
         ]
+    }
+
+    /// struct 선언에 붙은 modifier만 생성 `init` / `encode` / `CodingKeys`에 동일하게 반영한다.
+    private static func memberModifierPrefix(from structDecl: StructDeclSyntax) -> String {
+        guard !structDecl.modifiers.isEmpty else { return "" }
+        return structDecl.modifiers.map(\.trimmedDescription).joined(separator: " ") + " "
     }
 
 }

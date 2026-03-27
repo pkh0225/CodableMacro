@@ -18,7 +18,7 @@ final class CodedAtMacroExpansionTests: XCTestCase {
                 var title: String
             }
 
-            nonisolated extension S: Decodable {
+            extension S: Decodable {
                 init(from decoder: any Decoder) throws {
                     let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -34,7 +34,7 @@ final class CodedAtMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S: Encodable {
+            extension S: Encodable {
                 func encode(to encoder: any Encoder) throws {
                     var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -42,7 +42,7 @@ final class CodedAtMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension S {
+            extension S {
                 enum CodingKeys: String, CodingKey {
                     case title = "user_title"
                 }
@@ -68,7 +68,7 @@ final class CodedAtMacroExpansionTests: XCTestCase {
                 var biography: String
             }
 
-            nonisolated extension Profile: Decodable {
+            extension Profile: Decodable {
                 init(from decoder: any Decoder) throws {
                     let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -93,7 +93,7 @@ final class CodedAtMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension Profile: Encodable {
+            extension Profile: Encodable {
                 func encode(to encoder: any Encoder) throws {
                     var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -102,7 +102,7 @@ final class CodedAtMacroExpansionTests: XCTestCase {
                 }
             }
 
-            nonisolated extension Profile {
+            extension Profile {
                 enum CodingKeys: String, CodingKey {
                     case biography = "bio"
                     case detail = "detail"
