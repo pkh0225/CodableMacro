@@ -27,8 +27,6 @@ struct AttributeParser {
         var defaultValue: String? = nil
         var codedAtPath: [String]? = nil
         var codedAsKeys: [String]? = nil
-        var codedInParentType: String? = nil
-        var codedInSourceProperty: String? = nil
         var isIgnored = false
 
         for attribute in variable.attributes {
@@ -46,22 +44,9 @@ struct AttributeParser {
                 codedAtPath = extractStringArgs(from: attr)
             case "CodedAs":
                 codedAsKeys = extractStringArgs(from: attr)
-            case "CodedIn":
-                guard let args = extractStringArgs(from: attr), args.count == 2 else {
-                    throw MacroError.codedInRequiresTwoStringArguments(propertyName: name)
-                }
-                codedInParentType = args[0]
-                codedInSourceProperty = args[1]
             default:
                 break
             }
-        }
-
-        if isIgnored, codedInParentType != nil {
-            throw MacroError.ignoreConflictsWithCodedIn(propertyName: name)
-        }
-        if codedInParentType != nil, codedAtPath != nil {
-            throw MacroError.codedInConflictsWithCodedAt(propertyName: name)
         }
 
         let resolvedDefault: String
@@ -88,9 +73,7 @@ struct AttributeParser {
             codedAtPath: codedAtPath,
             codedAsKeys: codedAsKeys,
             isOptional: isOptional,
-            isIgnored: isIgnored,
-            codedInParentType: codedInParentType,
-            codedInSourceProperty: codedInSourceProperty
+            isIgnored: isIgnored
         )
     }
 

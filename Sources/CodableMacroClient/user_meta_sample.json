@@ -1,4 +1,8 @@
 {
+    "bbb": {
+        "age": 100,
+        "bbb": 999
+    },
   "codableData": {
     "bio": "Swift 매크로로 디코딩한 소개 문구",
     "title": "메타 제목",

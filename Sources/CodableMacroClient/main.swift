@@ -1,6 +1,12 @@
 import Foundation
 import CodableMacro
 
+@Codable
+struct TestB {
+    var age: Int
+    var bbb: Int
+}
+
 // ✅ CodableData가 CodableAfterProtocol 채택 → afterParsedTypes에 명시
 @Codable
 struct UserMetaCodable: CodableAfterProtocol {
@@ -22,6 +28,8 @@ struct UserMetaCodable: CodableAfterProtocol {
     @CodedAt("codableData", "bio")
     @Default("소개 없음")
     var biography: String
+
+    var bbb: TestB?
 
     mutating func afterParsed() {
         if name == "이름 없음" { name = "afterParsed() 적용 후 대체값 적용" }
@@ -59,9 +67,7 @@ struct CodableData: CodableAfterProtocol {
 struct CodableData2: CodableAfterProtocol {
     var title: String      // ValueCoder 자동 적용
     var count: Int         // ValueCoder 자동 적용
-    /// JSON의 `price` 대신 부모 `UserMetaCodable.score`를 디코딩 후 주입
-    @CodedIn("UserMetaCodable", "score")
-    var price: Double
+    var price: Double      // ValueCoder 자동 적용
 
     mutating func afterParsed() {
         print("CodableData 222 afterParsed")
@@ -91,7 +97,7 @@ do {
 //    } else {
 //        print("codableData: nil")
 //    }
-    print("codableData2 (\(userMeta.codableData2.count)개) — price는 부모 score(\(userMeta.score))로 주입:")
+    print("codableData2 (\(userMeta.codableData2.count)개) — price는 JSON 항목의 값:")
     for (i, item) in userMeta.codableData2.enumerated() {
         print("  [\(i)] title: \(item.title), count: \(item.count), price: \(item.price)")
     }

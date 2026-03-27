@@ -9,6 +9,5 @@ struct CodableMacroPlugin: CompilerPlugin {
         CodedAsMacro.self,
         DefaultMacro.self,
         IgnoreMacro.self,
-        CodedInMacro.self,
     ]
 }

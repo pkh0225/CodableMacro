@@ -9,6 +9,5 @@ enum CodableMacroTestSupport {
         "CodedAt": CodedAtMacro.self,
         "CodedAs": CodedAsMacro.self,
         "Ignore": IgnoreMacro.self,
-        "CodedIn": CodedInMacro.self,
     ]
 }

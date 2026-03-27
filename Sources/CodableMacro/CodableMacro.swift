@@ -6,8 +6,7 @@ import Foundation
 @attached(extension, conformances: Codable, names:
     named(CodingKeys),
     named(init(from:)),
-    named(encode(to:)),
-    named(applyCodedInFromParent)
+    named(encode(to:))
 )
 public macro Codable() = #externalMacro(
     module: "CodableMacroImpl",
@@ -36,12 +35,6 @@ public macro Default<T>(_ value: T) = #externalMacro(
 public macro Ignore() = #externalMacro(
     module: "CodableMacroImpl",
     type: "IgnoreMacro"
-)
-
-@attached(peer)
-public macro CodedIn(_ parentTypeName: String, _ parentPropertyName: String) = #externalMacro(
-    module: "CodableMacroImpl",
-    type: "CodedInMacro"
 )
 
 // MARK: - CodableAfterProtocol

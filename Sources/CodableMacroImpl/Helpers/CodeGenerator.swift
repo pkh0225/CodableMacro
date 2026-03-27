@@ -4,8 +4,6 @@ struct CodeGenerator {
     let typeName: String
     let properties: [PropertyInfo]
     let conformsToAfterParsed: Bool
-    /// 부모 `init(from:)`에서 `[Element]` 요소에 `applyCodedInFromParent`를 호출할 때 사용
-    let arrayStructProperties: [(propertyName: String, elementTypeName: String)]
 
     /// CodingKeys·디코드·인코드에 포함되는 프로퍼티
     private var codableProperties: [PropertyInfo] {
@@ -14,25 +12,6 @@ struct CodeGenerator {
 
     private var ignoredProperties: [PropertyInfo] {
         properties.filter(\.isIgnored)
-    }
-
-    private var codedInProperties: [PropertyInfo] {
-        properties.filter(\.isCodedIn)
-    }
-
-    /// `[String]` 등 원시/컬렉션 요소 배열에는 부모 주입 루프를 넣지 않습니다.
-    static func shouldEmitParentCodedInLoop(forElementTypeName typeName: String) -> Bool {
-        let t = typeName.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !t.isEmpty else { return false }
-        let primitives: Set<String> = [
-            "String", "Int", "Int8", "Int16", "Int32", "Int64",
-            "UInt", "UInt8", "UInt16", "UInt32", "UInt64",
-            "Double", "Float", "CGFloat", "Bool", "Data", "UUID", "URL", "Date",
-        ]
-        guard !primitives.contains(t) else { return false }
-        guard t.first?.isUppercase == true else { return false }
-        guard !t.contains("[") && !t.contains("<") && !t.contains(" ") else { return false }
-        return true
     }
 
     // 기본 들여쓰기 단위
@@ -50,28 +29,6 @@ struct CodeGenerator {
 
     func indentedEncodeToForExtension() -> String {
         indentBlock(generateEncodeTo(), by: "    ")
-    }
-
-    /// `@CodedIn` — 부모 디코딩 후 `applyCodedInFromParent`로 주입 (첫 인자가 부모 타입명)
-    func indentedApplyCodedInFromParentExtension() -> String {
-        let parentType = codedInProperties.first?.codedInParentType ?? "UserMetaCodable"
-        let inner: String
-        if codedInProperties.isEmpty {
-            inner = """
-            mutating func applyCodedInFromParent(_ parent: \(parentType)) {
-            }
-            """
-        } else {
-            let assigns = codedInProperties.map { prop in
-                "\(i1)self.\(prop.name) = parent.\(prop.codedInSourceProperty!)"
-            }.joined(separator: "\n")
-            inner = """
-            mutating func applyCodedInFromParent(_ parent: \(parentType)) {
-            \(assigns)
-            }
-            """
-        }
-        return indentBlock(inner, by: "    ")
     }
 
     private func indentBlock(_ source: String, by prefix: String) -> String {
@@ -171,8 +128,6 @@ struct CodeGenerator {
             }
         }
 
-        lines.append(contentsOf: generateParentCodedInApplyLoops())
-
         if conformsToAfterParsed {
             lines.append("")
             lines.append("\(i1)afterParsed()")
@@ -219,18 +174,6 @@ struct CodeGenerator {
 
     // MARK: - 일반 프로퍼티 디코딩
 
-    private func generateParentCodedInApplyLoops() -> [String] {
-        var lines: [String] = []
-        for (propName, elementType) in arrayStructProperties {
-            guard Self.shouldEmitParentCodedInLoop(forElementTypeName: elementType) else { continue }
-            lines.append("")
-            lines.append("\(i1)for __codedInIdx in \(propName).indices {")
-            lines.append("\(i2)\(propName)[__codedInIdx].applyCodedInFromParent(self)")
-            lines.append("\(i1)}")
-        }
-        return lines
-    }
-
     private func generateDecodeLines(
         for prop: PropertyInfo,
         containerExpr: String,
@@ -240,10 +183,6 @@ struct CodeGenerator {
         let ii = indent + "    "
         let iii = indent + "        "
         let def = prop.defaultValue
-
-        if prop.isCodedIn {
-            return ["\(i)self.\(prop.name) = \(def)"]
-        }
 
         // 1순위: @CodedAs 다중 키
         if let asKeys = prop.codedAsKeys {
@@ -366,12 +305,6 @@ struct CodeGenerator {
     private func generateNestedDecodeLines(for prop: PropertyInfo, parentKey: String) -> [String] {
         let def = prop.defaultValue
         let key = "CodingKeys.\(prop.name)"
-        if prop.isCodedIn {
-            return [
-                "",
-                "\(i1)self.\(prop.name) = \(def)",
-            ]
-        }
         return [
             "",
             "\(i1)if let \(parentKey)_c = \(parentKey)_container {",

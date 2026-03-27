@@ -18,7 +18,8 @@ final class CustomTypeDecodeMacroExpansionTests: XCTestCase {
             struct S: Sendable {
                 var kind: Kind
             }
-            enum Kind: String, Codable { case a }
+            enum Kind: String, Codable { case a
+            }
 
             nonisolated extension S: Decodable {
                 init(from decoder: any Decoder) throws {
