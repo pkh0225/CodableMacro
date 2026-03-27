@@ -39,6 +39,6 @@ public macro Ignore() = #externalMacro(
 
 // MARK: - CodableAfterProtocol
 
-nonisolated public protocol CodableAfterProtocol {
-    nonisolated mutating func afterParsed()
+public protocol CodableAfterProtocol {
+    mutating func afterParsed()
 }
