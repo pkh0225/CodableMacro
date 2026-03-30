@@ -60,10 +60,12 @@ struct SimpleModel {
     var names: [String]
     var dic: [String: String]
 
+    @Default("123")
+    let optionalString: String
+
     @Ignore
     var any: CodableData?
 }
-
 
 @Codable
 struct CodableData: CodableAfterProtocol {

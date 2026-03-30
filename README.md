@@ -63,7 +63,23 @@ struct User {
 | `@Default(값)` | 해당 키가 없거나 디코딩에 실패했을 때 사용할 **기본값**을 명시합니다. |
 | `@Ignore` | `CodingKeys`·인코드·디코드에서 **제외**합니다. `init(from:)`에서는 기본값 식으로만 초기화합니다. |
 
-`@Default`가 없어도 `var x: T = 초기값` 형태의 **선언부 초기값**이 있으면, 그 식이 동일한 용도의 기본값으로 사용됩니다.
+### 선언부 `= 초기값` ( `@Default` 없이 )
+
+`@Default`를 붙이지 않아도, 저장 프로퍼티에 **선언부 초기값**이 있으면 그 **오른쪽 식**을 `@Default`와 같은 용도로 사용합니다. (디코딩 폴백, `@CodedAs`·중첩 키 실패 시, `@Ignore` 시 `init(from:)` 대입 등)
+
+**우선순위:** `@Default(...)` 가 있으면 **항상 매크로 인자가 우선**합니다. 없을 때만 선언부 `= 식`을 참조하고, 그것도 없으면 타입별 기본값(`""`, `0`, `false`, 옵셔널은 `nil`, 컬렉션은 빈 컬렉션 등)을 씁니다.
+
+```swift
+@Codable
+struct Profile {
+    var name: String = ""           // 키 누락·디코딩 실패 시 ""
+    var age: Int = 0                // 동일하게 0
+    var isAdmin: Bool = false       // 동일하게 false
+
+    @Default("guest")
+    var role: String = "user"       // 폴백은 "guest" (선언부보다 @Default 우선)
+}
+```
 
 ### `@Ignore`와 비옵셔널
 
