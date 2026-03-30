@@ -21,12 +21,12 @@ nonisolated public struct UserMetaCodable: CodableAfterProtocol {
     @Default("이름 없음")
     var name: String                    // → ValueCoder String 자동 변환
     @CodedAs("name3", "name4", "name5")
-    var name2: String                   // → ValueCoder String 자동 변환, default ""
+    var name2: String = "123"           // → ValueCoder String 자동 변환, default ""
 
     @Default(20)
     var age: Int                        // → ValueCoder Int 자동 변환
 
-    var score: Double                   // → ValueCoder Double 자동 변환, default 0
+    var score: Double = 0.1                   // → ValueCoder Double 자동 변환, default 0
 
     var isAdmin: Bool                   // → ValueCoder Bool 자동 변환, default false
 
@@ -39,7 +39,11 @@ nonisolated public struct UserMetaCodable: CodableAfterProtocol {
     @Default(TestEnum.aaa)
     var enumtest: TestEnum
 
-    var int64: Int64 
+    @Ignore
+    var int64: Int64?
+
+    @Ignore
+    var int64s: [Int64] = []
 
     mutating public func afterParsed() {
         print("UserMetaCodable 000 afterParsed")

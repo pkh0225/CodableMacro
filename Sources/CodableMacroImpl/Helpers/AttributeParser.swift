@@ -51,9 +51,10 @@ struct AttributeParser {
 
         let resolvedDefault: String
         if let dv = defaultValue {
+            // `@Default(...)`가 있으면 항상 우선
             resolvedDefault = normalizeDefaultValueSpelling(dv)
-        } else if isIgnored, let initClause = binding.initializer {
-            // @Ignore + 비옵셔널: JSON에 없으므로 선언부 `= 값`으로 init(from:) 대입
+        } else if let initClause = binding.initializer {
+            // `@Default` 없이 선언부 `var x: T = 값`이 있으면 그 식을 디코딩 폴백(및 `@Ignore` 대입)에 사용
             resolvedDefault = normalizeDefaultValueSpelling(initClause.value.trimmedDescription)
         } else {
             resolvedDefault = normalizeDefaultValueSpelling(
